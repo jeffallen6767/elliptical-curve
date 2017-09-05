@@ -1,0 +1,26 @@
+{
+  "name": "elliptical-curve",
+  "version": "1.0.0",
+  "description": "elliptical curve in JavaScript",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeffallen6767/elliptical-curve.git"
+  },
+  "keywords": [
+    "elliptical-curve"
+  ],
+  "author": "jeffrey david allen",
+  "license": "",
+  "bugs": {
+    "url": "https://github.com/jeffallen6767/elliptical-curve/issues"
+  },
+  "homepage": "https://github.com/jeffallen6767/elliptical-curve#readme",
+  "devDependencies": {
+    "testing": "https://github.com/jeffallen6767/testing.git"
+  },
+  "dependencies": {}
+}
