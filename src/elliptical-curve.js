@@ -32,25 +32,24 @@ function findFactors(num, skip) {
   if (skip.indexOf(-1) === -1) {
     results.push(-1);
   }
-  
   if (skip.indexOf(1) === -1) {
     results.push(1);
   }
   
   for (x=start; x<root; x+=inc) {
     if (num % x === 0) {
-      if (skip.indexOf(x) === -1) {
-        results.push(x);
-        y = num / x;
-        if (y !== x) {
-          results.push(y);
-        }
-      }
       negX = -1 * x;
       if (skip.indexOf(negX) === -1) {
         results.push(negX);
         y = num / negX;
         if (y !== negX) {
+          results.push(y);
+        }
+      }
+      if (skip.indexOf(x) === -1) {
+        results.push(x);
+        y = num / x;
+        if (y !== x) {
           results.push(y);
         }
       }
@@ -60,7 +59,6 @@ function findFactors(num, skip) {
   if (skip.indexOf(negNum) === -1) {
     results.push(negNum);
   }
-  
   if (skip.indexOf(num) === -1) {
     results.push(num);
   }
@@ -166,9 +164,10 @@ function solveForThird(curve, points) {
     "last": right.last - left.last
   };
   
-  // find the remaining factors, skip the existing ones:
+  // the existing values of X:
   existing = [oneX, twoX];
-  // add the inverses, as well
+  
+  // find other possible values for X:
   factors = findFactors(poly.last, existing);
 
   // count them
