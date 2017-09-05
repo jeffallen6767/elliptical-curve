@@ -9,7 +9,7 @@ var
 function elliptical_curve(input) {
   var
     a = input.a || 0,
-    b = input.b || b,
+    b = input.b || 0,
     elliptical_curve = {
       "meta": {
         "a": a,
@@ -26,35 +26,45 @@ function findFactors(num, skip) {
     inc = isEven ? 1 : 2,
     start = isEven ? 2 : 3,
     root = Math.sqrt(num),
-    x;
+    negNum = -1 * num,
+    x,negX;
+  
+  if (skip.indexOf(-1) === -1) {
+    results.push(-1);
+  }
   
   if (skip.indexOf(1) === -1) {
     results.push(1);
   }
   
   for (x=start; x<root; x+=inc) {
-    if (num % x !== 0 || skip.indexOf(x) !== -1) continue;
-    results.push(x);
-    y = num / x;
-    if (y !== x) results.push(y);
+    if (num % x === 0) {
+      if (skip.indexOf(x) === -1) {
+        results.push(x);
+        y = num / x;
+        if (y !== x) {
+          results.push(y);
+        }
+      }
+      negX = -1 * x;
+      if (skip.indexOf(negX) === -1) {
+        results.push(negX);
+        y = num / negX;
+        if (y !== negX) {
+          results.push(y);
+        }
+      }
+    }
+  }
+  
+  if (skip.indexOf(negNum) === -1) {
+    results.push(negNum);
   }
   
   if (skip.indexOf(num) === -1) {
     results.push(num);
   }
   
-  return results;
-}
-
-function addInverses(factors, skip) {
-  var results = [];
-  factors.forEach(function(factor) {
-    var inverse = -1 * factor;
-    if (skip.indexOf(inverse) === -1) {
-      results.push(inverse);
-    }
-    results.push(factor);
-  });
   return results;
 }
 
@@ -159,14 +169,8 @@ function solveForThird(curve, points) {
   // find the remaining factors, skip the existing ones:
   existing = [oneX, twoX];
   // add the inverses, as well
-  factors = addInverses(
-    findFactors(
-      poly.last, 
-      existing
-    ),
-    existing
-  );
-  
+  factors = findFactors(poly.last, existing);
+
   // count them
   numFactors = factors.length;
   

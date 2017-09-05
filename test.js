@@ -21,7 +21,10 @@ var
         test.startTime();
         result = ec.solveForThird(curve, points);
         test.endTime();
-        test.assert.identical(JSON.stringify(result), JSON.stringify(expected));
+        test.assert.identical(
+          JSON.stringify(result), 
+          JSON.stringify(expected)
+        );
         test.done();
       }
     }
