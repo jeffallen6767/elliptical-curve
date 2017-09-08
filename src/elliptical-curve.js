@@ -201,7 +201,92 @@ function solveForThird(curve, points) {
   return result;
 }
 
+/*
+Curve:y^2=x^3+ax+b
+P1=(x1,y1) P2=(x2,y2) P1+P2=(x3,y3)
+When x1≠x2:
+s=(y2-y1)/(x2-x1)
+x3=s^2-x1-x2
+y3=s(x1-x3)-y1
+*/
+function solveForGroup(curve, points) {
+  var
+    ca = curve.meta.a,
+    cb = curve.meta.b,
+    one = points[0],
+    two = points[1],
+    x1 = one.x,
+    y1 = one.y,
+    x2 = two.x,
+    y2 = two.y,
+    // curve = y^2=x^3 + ax + b
+    oneOnCurve = Math.pow(y1, 2) == Math.pow(x1, 3) + ca * x1 + cb,
+    twoOnCurve = Math.pow(y2, 2) == Math.pow(x2, 3) + ca * x2 + cb,
+    bothOnCurve = oneOnCurve && twoOnCurve,
+    differentXs = x1 !== x2,
+    solveable = bothOnCurve && differentXs,
+    s,x3,y3,
+    result;
+
+  if (!solveable) {
+    if (!oneOnCurve) {
+      throw new Error([
+        "solveForGroup(curve, points), ERROR: Unsolveable because 1st point (",
+        x1,
+        ",",
+        y1,
+        ") not on curve(a:",
+        ca,
+        ",b:",
+        cb,
+        ")"
+      ].join(CHAR_NO_SPACE));
+    }
+    if (!twoOnCurve) {
+      throw new Error([
+        "solveForGroup(curve, points), ERROR: Unsolveable because 2nd point (",
+        x2,
+        ",",
+        y2,
+        ") not on curve(a:",
+        ca,
+        ",b:",
+        cb,
+        ")"
+      ].join(CHAR_NO_SPACE));
+    }
+    // must be identical x's
+    throw new Error([
+      "solveForGroup(curve, points), ERROR: Unsolveable because 1st point (",
+      x1,
+      ",",
+      y1,
+      ") and 2nd point (",
+      x2,
+      ",",
+      y2,
+      ") have same x value..."
+    ].join(CHAR_NO_SPACE));
+  }
+  
+  // slope, y=mx+b
+  s = (y2 - y1)/(x2 - x1);
+  x3 = Math.pow(s, 2) - x1 - x2;
+  y3 = s * (x1 - x3) - y1;
+  
+  result = {x:x3,y:y3};
+  
+  //console.log("s", s);
+  //console.log("x3", x3);
+  //console.log("y3", y3);
+
+  //console.log("result", result);
+
+  return result;
+}
+
 module.exports = {
   "elliptical_curve": elliptical_curve,
-  "solveForThird": solveForThird
+  "solveForThird": solveForThird,
+  "solveForGroup": solveForGroup
 };
